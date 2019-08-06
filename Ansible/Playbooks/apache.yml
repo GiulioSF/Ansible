@@ -1,0 +1,25 @@
+---
+- hosts: labzin
+  remote_user: root
+  tasks:
+          - name: "Instalando Apache e o MySQL"
+            apt: name={{ item }} state=present
+            with_items:
+                    - apache2
+                    - mysql-server
+                    - python-mysqldb
+
+          - name: "Instalando Apache e o MySQL e para que seja iniciado no boot"
+            service: name={{ item }} state=started enabled=yes
+            with_items:
+                   - apache2
+                   - mysql
+
+          - name: "Criando um Database de Teste"
+            mysql_db: name=linuxtipsDB
+                       state=present
+
+          - name: "Criando um User para o MySQL"
+            mysql_user: name=chatuba
+                         passwd=chatuba
+                         priv=*.*:ALL state=present
